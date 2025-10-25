@@ -1,0 +1,2 @@
+- [x] Add autocomplete="current-password" to password input in Login.jsx
+- [x] Change axios baseURL to "http://localhost:5174" in src/api/axios
