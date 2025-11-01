@@ -17,14 +17,17 @@ export default function Register() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
+    console.log("from register"+ formData.username,formData.email,formData.password);
+    
     e.preventDefault();
     try {
       setLoading(true);
-      setError(""); // Clear previous errors
+      setError("");
+      console.log("from register"+formData.role);
+      
       await register(formData);
-      // Navigation is now handled in AuthContext based on role
     } catch (err) {
-      setError(err.response?.data?.message || "Registration failed");
+      setError(err.response.data.message || "Registration failed");
     } finally {
       setLoading(false);
     }
@@ -34,64 +37,64 @@ export default function Register() {
     setShowPassword(!showPassword);
   };
 
-  // Role descriptions
+  // Role descriptions (Legal context)
   const roleDescriptions = {
-    Entrepreneur: [
-      "Share your innovative ideas with investors",
-      "Get feedback and mentorship",
-      "Access funding opportunities"
+    Lawyer: [
+      "Connect with clients seeking legal help",
+      "Showcase your expertise and experience",
+      "Manage appointments and consultations",
     ],
-    Investor: [
-      "Discover promising startups",
-      "Connect with talented entrepreneurs", 
-      "Portfolio management tools"
+    Client: [
+      "Find and consult trusted lawyers",
+      "Book appointments securely",
+      "Access professional legal advice",
     ],
     Admin: [
-      "Platform management",
-      "User moderation",
-      "Analytics and insights"
-    ]
+      "Manage users and platform operations",
+      "Oversee lawyer-client interactions",
+      "Maintain system integrity and security",
+    ],
   };
 
   return (
     <div className="min-h-screen flex">
       {/* Left Side - Background Image with Overlay */}
       <div className="hidden lg:flex lg:flex-1 relative bg-gradient-to-br from-blue-900 to-purple-900">
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
           style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')`
+            backgroundImage: `url('https://images.unsplash.com/photo-1603791440384-56cd371ee9a7?auto=format&fit=crop&w=2070&q=80')`,
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 to-purple-900/60" />
-        
+
         {/* Content Overlay */}
         <div className="relative z-10 flex flex-col justify-center px-12 text-white">
           <div className="max-w-md">
             <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-              Innovators Hub
+              LEGALEASE
             </h1>
             <p className="text-xl mb-4 font-light">
-              Join the Future of Innovation and Investment
+              Bridging the gap between clients and lawyers — legally, easily.
             </p>
             <div className="space-y-3 mt-8">
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center">
-                  <span className="text-sm font-bold">🚀</span>
+                  <span className="text-sm font-bold">⚖️</span>
                 </div>
-                <span className="text-cyan-100">Launch your startup journey</span>
+                <span className="text-cyan-100">Find trusted legal experts</span>
               </div>
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
-                  <span className="text-sm font-bold">🤝</span>
+                  <span className="text-sm font-bold">📅</span>
                 </div>
-                <span className="text-cyan-100">Connect with like-minded innovators</span>
+                <span className="text-cyan-100">Book consultations easily</span>
               </div>
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                  <span className="text-sm font-bold">💼</span>
+                  <span className="text-sm font-bold">💬</span>
                 </div>
-                <span className="text-cyan-100">Access funding opportunities</span>
+                <span className="text-cyan-100">Get expert legal guidance</span>
               </div>
             </div>
           </div>
@@ -104,35 +107,49 @@ export default function Register() {
           {/* Mobile Logo */}
           <div className="lg:hidden text-center mb-8">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Innovators Hub
+              LEGALEASE
             </h1>
-            <p className="text-gray-600 mt-2">Join Our Innovation Community</p>
+            <p className="text-gray-600 mt-2">
+              Your trusted digital legal companion
+            </p>
           </div>
 
           <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
             <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-gray-900">Join Innovators Hub</h2>
-              <p className="text-gray-600 mt-2">Create your account and start your journey</p>
+              <h2 className="text-3xl font-bold text-gray-900">
+                Create Your LEGALEASE Account
+              </h2>
+              <p className="text-gray-600 mt-2">
+                Join our platform to connect and consult easily
+              </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Username */}
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="username"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   Full Name
                 </label>
                 <input
                   name="username"
                   id="username"
                   placeholder="Enter your full name"
-                  value={formData.name}
+                  value={formData.username}
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50/50"
                 />
               </div>
 
+              {/* Email */}
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   Email Address
                 </label>
                 <input
@@ -147,8 +164,12 @@ export default function Register() {
                 />
               </div>
 
+              {/* Password */}
               <div className="relative">
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   Password
                 </label>
                 <div className="relative">
@@ -166,28 +187,54 @@ export default function Register() {
                     type="button"
                     onClick={togglePasswordVisibility}
                     className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors duration-200"
-                    style={{ top: '50%', transform: 'translateY(-50%)' }}
+                    style={{ top: "50%", transform: "translateY(-50%)" }}
                   >
                     {showPassword ? (
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                        />
                       </svg>
                     ) : (
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
+                        />
                       </svg>
                     )}
                   </button>
                 </div>
-                <p className="text-xs text-gray-500 mt-2">
-                  Must be at least 8 characters with numbers and letters
-                </p>
               </div>
 
+              {/* Role Selection */}
               <div>
-                <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-2">
-                  I am joining as
+                <label
+                  htmlFor="role"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  I am registering as
                 </label>
                 <select
                   name="role"
@@ -196,25 +243,24 @@ export default function Register() {
                   onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50/50 appearance-none cursor-pointer"
                 >
-                  <option value="Entrepreneur">🚀 Entrepreneur</option>
-                  <option value="Investor">💰 Investor</option>
+                  <option value="Lawyer">⚖️ Lawyer</option>
+                  <option value="Client">👤 Client</option>
                   <option value="Admin">⚙️ Admin</option>
                 </select>
               </div>
 
-              {/* Role Descriptions */}
-             
-
               {error && (
                 <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-                  <p className="text-red-600 text-sm text-center font-medium">{error}</p>
+                  <p className="text-red-600 text-sm text-center font-medium">
+                    {error}
+                  </p>
                 </div>
               )}
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3.5 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:transform-none disabled:hover:shadow-lg"
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3.5 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50"
               >
                 {loading ? (
                   <div className="flex items-center justify-center space-x-2">
@@ -230,8 +276,8 @@ export default function Register() {
             <div className="mt-8 text-center">
               <p className="text-gray-600">
                 Already have an account?{" "}
-                <a 
-                  href="/login" 
+                <a
+                  href="/login"
                   className="font-semibold text-blue-600 hover:text-blue-700 transition-colors duration-200"
                 >
                   Sign In
@@ -239,13 +285,16 @@ export default function Register() {
               </p>
             </div>
 
-          
-          
             <div className="mt-6 text-center">
               <p className="text-xs text-gray-500">
                 By creating an account, you agree to our{" "}
-                <a href="#" className="text-blue-600 hover:text-blue-700">Terms</a> and{" "}
-                <a href="#" className="text-blue-600 hover:text-blue-700">Privacy Policy</a>
+                <a href="#" className="text-blue-600 hover:text-blue-700">
+                  Terms
+                </a>{" "}
+                and{" "}
+                <a href="#" className="text-blue-600 hover:text-blue-700">
+                  Privacy Policy
+                </a>
               </p>
             </div>
           </div>
