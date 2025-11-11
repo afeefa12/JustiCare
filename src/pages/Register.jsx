@@ -1,13 +1,19 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function Register() {
   const { register } = useAuth();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
-    role: "Lawyer",
+    role: "Client",
+    // Lawyer-specific fields
+    phoneNumber: "",
+    address: "",
+    barRegistrationNumber: "",
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -17,17 +23,20 @@ export default function Register() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
-    console.log("from register"+ formData.username,formData.email,formData.password);
-    
     e.preventDefault();
     try {
       setLoading(true);
       setError("");
-      console.log("from register"+formData.role);
       
-      await register(formData);
+      const result = await register(formData);
+      
+      // Store email for OTP verification
+      if (result && result.email) {
+        localStorage.setItem("pendingVerificationEmail", result.email);
+        navigate("/verify-otp");
+      }
     } catch (err) {
-      setError(err.response.data.message || "Registration failed");
+      setError(err.message || "Registration failed");
     } finally {
       setLoading(false);
     }
@@ -243,11 +252,69 @@ export default function Register() {
                   onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50/50 appearance-none cursor-pointer"
                 >
-                  <option value="Lawyer">⚖️ Lawyer</option>
                   <option value="Client">👤 Client</option>
-                  <option value="Admin">⚙️ Admin</option>
+                  <option value="Lawyer">⚖️ Lawyer</option>
                 </select>
               </div>
+
+              {/* Lawyer-specific fields */}
+              {formData.role === "Lawyer" && (
+                <>
+                  <div>
+                    <label
+                      htmlFor="phoneNumber"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Phone Number
+                    </label>
+                    <input
+                      name="phoneNumber"
+                      id="phoneNumber"
+                      type="tel"
+                      placeholder="Enter your phone number"
+                      value={formData.phoneNumber}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50/50"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="barRegistrationNumber"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Bar Registration Number
+                    </label>
+                    <input
+                      name="barRegistrationNumber"
+                      id="barRegistrationNumber"
+                      placeholder="Enter your bar registration number"
+                      value={formData.barRegistrationNumber}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50/50"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="address"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Address (Optional)
+                    </label>
+                    <input
+                      name="address"
+                      id="address"
+                      placeholder="Enter your address"
+                      value={formData.address}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50/50"
+                    />
+                  </div>
+                </>
+              )}
 
               {error && (
                 <div className="bg-red-50 border border-red-200 rounded-xl p-4">
@@ -276,12 +343,12 @@ export default function Register() {
             <div className="mt-8 text-center">
               <p className="text-gray-600">
                 Already have an account?{" "}
-                <a
-                  href="/login"
+                <Link
+                  to="/login"
                   className="font-semibold text-blue-600 hover:text-blue-700 transition-colors duration-200"
                 >
                   Sign In
-                </a>
+                </Link>
               </p>
             </div>
 

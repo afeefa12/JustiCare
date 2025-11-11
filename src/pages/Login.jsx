@@ -34,11 +34,11 @@ export default function Login() {
       // Correct redirection based on role
       if (user.role === "Admin") navigate("/Admin");
       else if (user.role === "Lawyer") navigate("/Lawyer");
-      else if (user.role === "Client") navigate("/Client");
+      else if (user.role === "Client" || user.role === "User") navigate("/Client");
       else navigate("/");
     } catch (err) {
       console.error("❌ Login error:", err);
-      setError("Login failed. Please try again.");
+      setError(err.message || "Login failed. Please try again.");
     } finally {
       setLoading(false);
     }
